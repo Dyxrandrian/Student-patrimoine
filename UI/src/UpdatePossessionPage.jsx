@@ -74,10 +74,10 @@ const UpdatePossessionPage = () => {
     setLoading(true);
     setError(null);
     setSuccessMessage(null);
-  
+
     try {
       const formattedDateFin = new Date(dateFin).toISOString(); // Formatage de la date
-  
+
       const response = await fetch(`http://localhost:3001/api/possession/${libelle}`, {
         method: 'PUT',
         headers: {
@@ -88,12 +88,12 @@ const UpdatePossessionPage = () => {
           dateFin: formattedDateFin, // Assurez-vous d'envoyer la date correctement formatée
         }),
       });
-  
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(`Network response was not ok: ${errorData.message || 'Unknown error'}`);
       }
-  
+
       const data = await response.json();
       setSuccessMessage('Possession mise à jour avec succès!');
       navigate('/possession'); // Redirect to the list of possessions
@@ -104,41 +104,46 @@ const UpdatePossessionPage = () => {
       setLoading(false);
     }
   };
-  
 
+  const styleDivPage = { backgroundColor: 'gray', padding: '40px', borderRadius: '20px 20px 20px 20px', boxShadow: "15px -22px 5px #5d5d5d4d" }
 
   return (
-    <div>
-      <h1>Update Possession</h1>
+    <div style={styleDivPage}>
+      <h1 className='d-flex align-items-center justify-content-center'>Update Possession</h1>
       {currentPossession ? (
         <form
           onSubmit={(e) => {
             e.preventDefault();
             handleUpdate();
           }}
+          className="bg-secondary d-flex flex-column items-center justify-content-center rounded mx-5"
         >
-          <div className="form-group">
-            <label htmlFor="valeur">Valeur</label>
+          <div className="form-group d-flex justify-content-evenly mb-2 mt-2">
+            <label htmlFor="valeur" className='text-info'>Valeur :</label>
             <input
               type="number"
               id="valeur"
               value={valeur}
               onChange={(e) => setValeur(e.target.value)}
               required
+              className='px-4 bg-secondary'
             />
           </div>
-          <div className="form-group">
-            <label htmlFor="dateFin">Date Fin</label>
+          <div className="form-group d-flex justify-content-evenly mb-2 mt-2">
+            <label htmlFor="dateFin" className='text-info'>Date Fin :</label>
             <input
               type="date"
               id="dateFin"
               value={dateFin}
               onChange={(e) => setDateFin(e.target.value)}
+              className='px-4 bg-secondary'
             />
           </div>
-          <button type="submit" disabled={loading}>
-            {loading ? 'Updating...' : 'Update'}
-          </button>
+          <div className='d-flex items-center justify-content-center mt-3 mb-3'>
+            <button type="submit" className='btn btn-success px-5' disabled={loading}>
+              {loading ? 'Updating...' : 'Update'}
+            </button>
+          </div>
         </form>
       ) : (
         <p>Loading...</p>
