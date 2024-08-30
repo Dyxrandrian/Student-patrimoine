@@ -25,7 +25,7 @@ const PatrimoinePage = () => {
     }
   };
 
-  const styleDivPage = { backgroundColor: 'gray', padding: '40px', borderRadius: '20px 20px 20px 20px'}
+  const styleDivPage = { backgroundColor: 'gray', padding: '40px', borderRadius: '20px 20px 20px 20px', boxShadow: "15px -22px 5px #5d5d5d4d"}
   const styleDivDate = {display : 'flex' , justifyContent: 'space-evenly'}
 
   return (
@@ -33,7 +33,7 @@ const PatrimoinePage = () => {
       <h1 className='d-flex align-items-center justify-content-center'>Calculer Patrimoine</h1>
       <div style={styleDivDate} className='mt-5'>
         <div className="form-group d-flex align-items-center">
-          <label htmlFor="date" className='mx-2 text-grey'>Select Date here :</label>
+          <label htmlFor="date" className='mx-2 text-grey'>Selectionne une date:</label>
           <input
             className='p-2 px-4'
             type="date"
@@ -49,7 +49,7 @@ const PatrimoinePage = () => {
       </div>
 
       {patrimoine !== null && 
-      <h3 className='mt-5'>Valeur du patrimoine au {date} : <strong className='text-light'>{patrimoine}</strong></h3>
+      <h3 className='mt-5'>Valeur du patrimoine au {date} : <strong className='text-light'>{patrimoine.toFixed(2)}</strong></h3>
       }
       {error && <p>Error: {error}</p>}
     </div>

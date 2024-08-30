@@ -34,8 +34,10 @@ const PatrimoineRangePage = () => {
     fetchData();
   };
 
+  const styleDivPage = { backgroundColor: 'gray', padding: '40px', borderRadius: '20px 20px 20px 20px', boxShadow: "15px -22px 5px #5d5d5d4d"}
+
   return (
-    <div>
+    <div style={styleDivPage}>
       <h2>Valeur du Patrimoine par Plage de Dates</h2>
       <Form onSubmit={handleSubmit}>
         <Form.Group controlId="startDate">

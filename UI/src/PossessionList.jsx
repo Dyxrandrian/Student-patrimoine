@@ -55,11 +55,11 @@ const PossessionList = () => {
       setError(err.message);
     }
   };
+  const styleDivPage = { backgroundColor: 'gray', padding: '40px', borderRadius: '20px 20px 20px 20px', boxShadow: "15px -22px 5px #5d5d5d4d"}
 
   return (
-    <div>
-      <h1>Liste des Possessions</h1>
-      <Button as={Link} to="/possession/create" variant="primary">Créer Possession</Button>
+    <div style={styleDivPage}>
+      <h1 className='d-flex align-items-center justify-content-center'>Liste des Possessions</h1>
       {loading ? (
         <p>Loading...</p>
       ) : error ? (
@@ -73,7 +73,6 @@ const PossessionList = () => {
               <th>Date Début</th>
               <th>Date Fin</th>
               <th>Taux d'amortissement</th>
-              <th>Valeur Actuelle</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -85,10 +84,9 @@ const PossessionList = () => {
                 <td>{new Date(possession.dateDebut).toLocaleDateString()}</td>
                 <td>{possession.dateFin ? new Date(possession.dateFin).toLocaleDateString() : 'N/A'}</td>
                 <td>{possession.tauxAmortissement}</td>
-                <td>{/* Calcul de la valeur actuelle, si nécessaire */}</td>
                 <td>
                   <Button as={Link} to={`/possession/${possession.libelle}/update`} variant="warning">Éditer</Button>{' '}
-                  <Button onClick={() => handleClose(possession.libelle)} variant="danger">Clôturer</Button>{' '}
+                  <Button onClick={() => handleClose(possession.libelle)} variant="success">Clôturer</Button>{' '}
                   <Button onClick={() => handleDelete(possession.libelle)} variant="danger">Supprimer</Button>
                 </td>
               </tr>
@@ -96,6 +94,7 @@ const PossessionList = () => {
           </tbody>
         </Table>
       )}
+      <Button as={Link} to="/possession/create" variant="primary">Créer Possession</Button>
     </div>
   );
 };
