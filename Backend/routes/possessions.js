@@ -21,6 +21,6 @@ router.delete('/:libelle', deletePossession);
 router.get('/:date', getValeurPatrimoine);
 
 //
-router.post('/range', getValeurPatrimoineRange);
+router.get('/range', getValeurPatrimoineRange);
 
 export default router;

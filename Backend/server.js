@@ -3,6 +3,7 @@ const app = express();
 const PORT = 3001;
 import fs from 'fs/promises';
 import cors from 'cors';
+import { readFile } from './data/index.js';
 app.use(cors()); // Ajoutez cette ligne pour activer CORS
 const dataFilePath = './data/possessions.json';
 
@@ -118,38 +119,50 @@ app.get('/api/patrimoine', async (req, res) => {
     }
 });
 
-import Flux from '../models/possessions/Flux.js'
+import Possession from '../models/possessions/Possession.js';
 
 app.get('/api/patrimoine/range', async (req, res) => {
-    const { startDate, endDate, jour } = req.query;
+    const { startDate, endDate } = req.query;
 
     const start = new Date(startDate);
     const end = new Date(endDate);
 
-    let valeursPatrimoine = [];
+    try {
+        // Lire les données et les parser en JSON
+        const data = await readData();
 
-    for (let d = start; d <= end; d.setMonth(d.getMonth() + 1)) {
-        const totalValeur = possessions.reduce((total, possession) => {
-            const flux = new Flux(
-                possession.possesseur,
-                possession.libelle,
-                possession.valeur,
-                new Date(possession.dateDebut),
-                possession.dateFin ? new Date(possession.dateFin) : null,
-                possession.tauxAmortissement,
-                jour
-            );
-            return total + flux.getValeur(new Date(d));
-        }, 0);
-        valeursPatrimoine.push({
-            date: new Date(d),
-            valeur: totalValeur
-        });
+        let valeursPatrimoine = [];
+
+        for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+            const totalValeur = data.reduce((total, possession) => {
+                // Convertir les valeurs en nombres
+                const valeur = parseFloat(possession.valeur);
+                const tauxAmortissement = parseFloat(possession.tauxAmortissement);
+
+                const flux = new Possession(
+                    possession.possesseur || '', // Assurez-vous que possesseur est défini
+                    possession.libelle || '', // Assurez-vous que libelle est défini
+                    valeur,
+                    new Date(possession.dateDebut),
+                    possession.dateFin ? new Date(possession.dateFin) : null,
+                    tauxAmortissement
+                );
+
+                return total + flux.getValeur(new Date(d));
+            }, 0);
+
+            valeursPatrimoine.push({
+                date: new Date(d).toISOString().split('T')[0], // Formater la date
+                valeur: totalValeur
+            });
+        }
+
+        res.json(valeursPatrimoine);
+    } catch (error) {
+        console.error('Erreur lors du calcul du patrimoine:', error);
+        res.status(500).json({ error: 'Erreur interne du serveur' });
     }
-
-    res.json(valeursPatrimoine);
 });
-
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

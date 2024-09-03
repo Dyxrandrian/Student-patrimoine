@@ -14,17 +14,21 @@ export default class Possession {
 
   getValeurApresAmortissement(dateActuelle) {
     if (dateActuelle < this.dateDebut) {
-      return 0;
+        return 0;
     }
-    const differenceDate = {
-      year: dateActuelle.getFullYear() - this.dateDebut.getFullYear(),
-      month: dateActuelle.getMonth() - this.dateDebut.getMonth(),
-      day: dateActuelle.getDate() - this.dateDebut.getDate(),
-    };
-  
-    var raison = differenceDate.year + differenceDate.month / 12 + differenceDate.day / 365;
+    
+    // Calculer la différence en mois
+    const moisDiff = (dateActuelle.getFullYear() - this.dateDebut.getFullYear()) * 12 + 
+                      (dateActuelle.getMonth() - this.dateDebut.getMonth());
 
-    const result = this.valeur - this.valeur *(raison * this.tauxAmortissement / 100);
-    return result;
-  }
+    // Convertir les mois en années
+    const anneesDiff = moisDiff / 12;
+
+    // Calculer la nouvelle valeur après amortissement
+    const valeurApresAmortissement = this.valeur * (1 - (anneesDiff * this.tauxAmortissement / 100));
+
+    // S'assurer que la valeur n'est pas négative
+    return Math.max(valeurApresAmortissement, 0);
+}
+
 }
