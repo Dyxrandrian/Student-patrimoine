@@ -10,6 +10,13 @@ app.use(express.json());
 import bodyParser from 'body-parser';
 import possessionRoutes from './routes/possessions.js';
 
+
+app.use(express.static(path.join('/UI')));
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join('/UI','', 'index.html'));
+});
+
 app.use(bodyParser.json());
 
 // Utiliser les routes pour les possessions
