@@ -1,11 +1,18 @@
 import express from 'express';
 const app = express();
 const PORT = 3001;
+import path from 'path';
 import fs from 'fs/promises';
 import cors from 'cors';
 import { readFile } from './data/index.js';
 app.use(cors()); // Ajoutez cette ligne pour activer CORS
 const dataFilePath = './data/possessions.json';
+
+app.use(express.static(path.join("/Backend", 'public')));
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join("/Backend", 'public', 'index.html'));
+});
 
 app.use(express.json());
 
