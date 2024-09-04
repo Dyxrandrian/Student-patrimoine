@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+const apiUrl = process.env.REACT_APP_BACKEND_URL;
 
 const PatrimoinePage = () => {
   const [date, setDate] = useState('');
@@ -11,7 +12,7 @@ const PatrimoinePage = () => {
     setError(null);
 
     try {
-      const response = await fetch(`http://localhost:3001/api/patrimoine?date=${date}`);
+      const response = await fetch(`${apiUrl}/api/patrimoine?date=${date}`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }

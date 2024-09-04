@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { Line } from 'react-chartjs-2';
 import 'chart.js/auto'; // Import nécessaire pour Chart.js 3.x
+const apiUrl = process.env.REACT_APP_BACKEND_URL;
 
 const PatrimoineRangePage = () => {
   const [startDate, setStartDate] = useState('');
@@ -10,7 +11,7 @@ const PatrimoineRangePage = () => {
   const [chartData, setChartData] = useState(null);
 
   const fetchData = async () => {
-    const response = await fetch(`http://localhost:3001/api/patrimoine/range?startDate=${startDate.toString()}&endDate=${endDate.toString()}&jour=${1}`);
+    const response = await fetch(`${apiUrl}/api/patrimoine/range?startDate=${startDate.toString()}&endDate=${endDate.toString()}&jour=${1}`);
     const data = await response.json();
     const dates = data.map(entry => new Date(entry.date).toLocaleDateString());
     const valeurs = data.map(entry => entry.valeur);

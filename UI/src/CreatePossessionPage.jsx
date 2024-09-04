@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+const apiUrl = process.env.REACT_APP_BACKEND_URL;
 const CreatePossessionPage = () => {
   const [libelle, setLibelle] = useState('');
   const [valeur, setValeur] = useState('');
@@ -15,7 +15,7 @@ const CreatePossessionPage = () => {
     setSuccessMessage(null);
 
     try {
-      const response = await fetch('http://localhost:3001/api/possession', {
+      const response = await fetch(`${apiUrl}/api/possession`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

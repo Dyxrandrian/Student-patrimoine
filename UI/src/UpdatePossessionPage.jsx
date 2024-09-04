@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-
+const apiUrl = process.env.REACT_APP_BACKEND_URL;
 const UpdatePossessionPage = () => {
   const { libelle } = useParams();
   const navigate = useNavigate();
@@ -15,7 +15,7 @@ const UpdatePossessionPage = () => {
     const fetchPossession = async () => {
       try {
         console.log('Fetching possession for libelle:', libelle);
-        const response = await fetch(`http://localhost:3001/api/possession/${libelle}`);
+        const response = await fetch(`${apiUrl}/api/possession/${libelle}`);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Table } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+const apiUrl = process.env.REACT_APP_BACKEND_URL;
 
 const PossessionList = () => {
   const [possessions, setPossessions] = useState([]);
@@ -11,7 +12,7 @@ const PossessionList = () => {
   useEffect(() => {
     const fetchPossessions = async () => {
       try {
-        const response = await fetch('http://localhost:3001/api/possession');
+        const response = await fetch(`${apiUrl}/api/possession`);
         if (!response.ok) {
           throw new Error('Failed to fetch possessions');
         }
