@@ -189,14 +189,15 @@ export const getValeurPatrimoineRange = async (req, res) => {
         while (currentDate <= fin) {
             let patrimoineTotal = 0;
             data.forEach(possession => {
-                const instancePossession = new Possession(
+                const instancePossession = new Flux(
                     possession.possesseur,
                     possession.libelle,
                     possession.valeur,
                     new Date(possession.dateDebut),
                     possession.dateFin ? new Date(possession.dateFin) : null,
                     possession.tauxAmortissement,
-                    jour // Si applicable
+                    possession.jour,
+                    possession.valeurConstante
                 );
                 patrimoineTotal += instancePossession.getValeur(currentDate);
             });

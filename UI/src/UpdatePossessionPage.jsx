@@ -78,7 +78,7 @@ const UpdatePossessionPage = () => {
     try {
       const formattedDateFin = new Date(dateFin).toISOString(); // Formatage de la date
 
-      const response = await fetch(`http://localhost:3001/api/possession/${libelle}`, {
+      const response = await fetch(`${apiUrl}/api/possession/${libelle}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
