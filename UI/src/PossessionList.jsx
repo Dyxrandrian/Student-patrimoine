@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Table } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-const apiUrl = process.env.REACT_APP_BACKEND_URL;
+const apiUrl = "https://student-patrimoine.onrender.com";
 
 const PossessionList = () => {
   const [possessions, setPossessions] = useState([]);

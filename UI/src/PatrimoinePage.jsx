@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-const apiUrl = process.env.REACT_APP_BACKEND_URL;
+const apiUrl = "https://student-patrimoine.onrender.com";
 
 const PatrimoinePage = () => {
   const [date, setDate] = useState('');
