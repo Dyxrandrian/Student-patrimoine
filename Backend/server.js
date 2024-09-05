@@ -3,7 +3,7 @@ const app = express();
 const PORT = 3001;
 import fs from 'fs/promises';
 import cors from 'cors';
-app.use(cors()); // Ajoutez cette ligne pour activer CORS
+app.use(cors()); 
 const dataFilePath = './data/possessions.json';
 app.use(express.json());
 
@@ -50,14 +50,12 @@ async function initializeData() {
 
 initializeData();
 
-// Endpoint pour obtenir la liste des possessions
 app.get('/possession', (req, res) => {
     // Retourne la liste des possessions
     res.status(200).json({ message: 'Liste des possessions' });
     res.json(possessions);
 });
 
-// Endpoint pour créer une nouvelle possession
 app.post('/possession', async (req, res) => {
     const { libelle, valeur, dateDebut, taux } = req.body;
     const newPossession = req.body;
@@ -138,8 +136,8 @@ app.get('/api/patrimoine/range', async (req, res) => {
                 const tauxAmortissement = parseFloat(possession.tauxAmortissement);
 
                 const flux = new Possession(
-                    possession.possesseur || '', // Assurez-vous que possesseur est défini
-                    possession.libelle || '', // Assurez-vous que libelle est défini
+                    possession.possesseur || '', 
+                    possession.libelle || '', 
                     valeur,
                     new Date(possession.dateDebut),
                     possession.dateFin ? new Date(possession.dateFin) : null,

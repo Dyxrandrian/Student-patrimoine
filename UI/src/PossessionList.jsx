@@ -29,7 +29,7 @@ const PossessionList = () => {
 
   const handleClose = async (libelle) => {
     try {
-      const response = await fetch(`http://localhost:3001/api/possession/${libelle}/close`, {
+      const response = await fetch(`${apiUrl}/api/possession/${libelle}/close`, {
         method: 'PATCH',
       });
       if (!response.ok) {
@@ -44,7 +44,7 @@ const PossessionList = () => {
 
   const handleDelete = async (libelle) => {
     try {
-      const response = await fetch(`http://localhost:3001/api/possession/${libelle}`, {
+      const response = await fetch(`${apiUrl}/api/possession/${libelle}`, {
         method: 'DELETE',
       });
       if (!response.ok) {

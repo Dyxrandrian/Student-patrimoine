@@ -85,7 +85,7 @@ const UpdatePossessionPage = () => {
         },
         body: JSON.stringify({
           valeur,
-          dateFin: formattedDateFin, // Assurez-vous d'envoyer la date correctement formatée
+          dateFin: formattedDateFin, 
         }),
       });
 

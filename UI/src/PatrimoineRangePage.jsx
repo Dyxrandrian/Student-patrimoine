@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { Line } from 'react-chartjs-2';
-import 'chart.js/auto'; // Import nécessaire pour Chart.js 3.x
+import 'chart.js/auto';
 const apiUrl = "https://student-patrimoine.onrender.com";
 
 const PatrimoineRangePage = () => {

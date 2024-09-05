@@ -133,7 +133,6 @@ export async function deletePossession(req, res) {
         res.status(500).json({ error: 'Erreur interne du serveur' });
     }
 }
-// controllers/patrimoineController.js
 import Flux from "../../models/possessions/Flux.js"
 export const getValeurPatrimoine = async (req, res) => {
     const { date } = req.params;
@@ -173,7 +172,6 @@ export const getValeurPatrimoine = async (req, res) => {
 };
 import Possession from '../../models/possessions/Possession.js';
 
-// controllers/patrimoineController.js
 export const getValeurPatrimoineRange = async (req, res) => {
     const { dateDebut, dateFin, jour, type } = req.body;
     const debut = new Date(dateDebut);

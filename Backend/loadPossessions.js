@@ -4,11 +4,9 @@ import Flux from '../models/possessions/Possession.js';
 
 async function loadPossessions() {
     try {
-        // Lire le fichier data.json
         const data = await fs.readFile('./data/possessions.json', 'utf-8');
         const possessions = JSON.parse(data);
 
-        // Instancier les objets Possession ou Flux
         const possessionInstances = possessions.map(item => {
             const { possesseur, libelle, valeur, dateDebut, dateFin, tauxAmortissement } = item;
             const dateDebutObj = new Date(dateDebut);

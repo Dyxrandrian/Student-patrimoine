@@ -11,6 +11,4 @@ async function calculatePatrimoine(date) {
     return totalValue;
 }
 export default calculatePatrimoine
-// Exemple : Calculer le patrimoine pour le 30 août 2024
-const patrimoineValue = await calculatePatrimoine('2024-08-30');
-console.log('Valeur totale du patrimoine au 30 août 2024 :', patrimoineValue);
+
