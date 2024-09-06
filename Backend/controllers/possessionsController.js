@@ -135,7 +135,7 @@ export async function deletePossession(req, res) {
     }
 }
 import Flux from "../../models/possessions/Flux.js"
-export const getValeurPatrimoine = async (req, res) => {
+/*export const getValeurPatrimoine = async (req, res) => {
     const { date } = req.params;
     const dateObjet = new Date(date);
 
@@ -170,10 +170,50 @@ export const getValeurPatrimoine = async (req, res) => {
         console.error('Erreur lors du calcul du patrimoine:', error);
         res.status(500).json({ error: 'Erreur interne du serveur' });
     }
+};*/
+import Patrimoine from '../../models/Patrimoine.js';
+export const getValeurPatrimoine = async (req, res) => {
+    const { date } = req.params;
+    const dateObjet = new Date(date);
+
+    try {
+        // Lire le fichier des possessions
+        const { status, data } = await readFile('./data/possessions.json');
+        if (status === 'ERROR') {
+            console.error('Erreur de lecture du fichier');
+            return res.status(500).json({ error: 'Erreur de lecture du fichier' });
+        }
+
+        // Filtrer les possessions par possesseur, par exemple
+        const possesseur = 'John Doe'; // Vous pouvez récupérer ceci dynamiquement via une requête ou un paramètre
+        const possessions = data.filter(possession => possession.possesseur === possesseur).map(possession => {
+            return new Flux(
+                possession.possesseur,
+                possession.libelle,
+                parseFloat(possession.valeur), // Conversion en nombre
+                new Date(possession.dateDebut),
+                possession.dateFin ? new Date(possession.dateFin) : null,
+                parseFloat(possession.tauxAmortissement), // Conversion en nombre
+                possession.jour // Si applicable
+            );
+        });
+
+        // Créer une instance de Patrimoine
+        const patrimoine = new Patrimoine(possesseur, possessions);
+
+        // Calculer la valeur totale du patrimoine
+        const patrimoineTotal = patrimoine.getValeur(dateObjet);
+
+        // Envoyer la réponse avec la valeur calculée
+        res.status(200).json({ date: dateObjet.toString(), patrimoine: patrimoineTotal });
+    } catch (error) {
+        console.error('Erreur lors du calcul du patrimoine:', error);
+        res.status(500).json({ error: 'Erreur interne du serveur' });
+    }
 };
 import Possession from '../../models/possessions/Possession.js';
 
-export const getValeurPatrimoineRange = async (req, res) => {
+/*export const getValeurPatrimoineRange = async (req, res) => {
     const { dateDebut, dateFin, jour, type } = req.body;
     const debut = new Date(dateDebut);
     const fin = new Date(dateFin);
@@ -217,5 +257,57 @@ export const getValeurPatrimoineRange = async (req, res) => {
         console.error('Erreur lors du calcul du patrimoine:', error);
         res.status(500).json({ error: 'Erreur interne du serveur' });
     }
-};
+};*/
+export const getValeurPatrimoineRange = async (req, res) => {
+    const { dateDebut, dateFin, jour, type } = req.body;
+    const debut = new Date(dateDebut);
+    const fin = new Date(dateFin);
 
+    try {
+        // Lire le fichier des possessions
+        const { status, data } = await readFile('./data/possessions.json');
+        if (status === 'ERROR') {
+            return res.status(500).json({ error: 'Erreur de lecture du fichier' });
+        }
+
+        // Filtrer les possessions par possesseur
+        const possesseur = 'John Doe'; // Cela peut être dynamique selon vos besoins
+        const possessions = data.filter(possession => possession.possesseur === possesseur).map(possession => {
+            return new Flux(
+                possession.possesseur,
+                possession.libelle,
+                parseFloat(possession.valeur), // Conversion en nombre
+                new Date(possession.dateDebut),
+                possession.dateFin ? new Date(possession.dateFin) : null,
+                parseFloat(possession.tauxAmortissement), // Conversion en nombre
+                possession.jour // Si applicable
+            );
+        });
+
+        // Créer une instance de Patrimoine
+        const patrimoine = new Patrimoine(possesseur, possessions);
+
+        // Calculer la valeur totale du patrimoine pour chaque date dans la plage
+        let results = [];
+        let currentDate = new Date(debut);
+
+        while (currentDate <= fin) {
+            // Utiliser la méthode getValeur de la classe Patrimoine pour obtenir la valeur du patrimoine à une date donnée
+            const patrimoineTotal = patrimoine.getValeur(currentDate);
+            results.push({ date: new Date(currentDate), patrimoine: patrimoineTotal });
+
+            // Avancer à la prochaine date selon le type
+            if (type === 'month') {
+                currentDate.setMonth(currentDate.getMonth() + 1);
+            } else {
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+        }
+
+        // Envoyer le résultat
+        res.status(200).json(results);
+    } catch (error) {
+        console.error('Erreur lors du calcul du patrimoine:', error);
+        res.status(500).json({ error: 'Erreur interne du serveur' });
+    }
+};
