@@ -44,6 +44,33 @@ export async function getPossessions(req, res) {
     }
 }
 
+export async function closePossession(req, res) {
+    const { libelle } = req.params;
+    console.log('Received libelle:', libelle);
+
+    try {
+        const { status, data } = await readFile('./data/possessions.json');
+        if (status === 'ERROR') {
+            return res.status(500).json({ error: 'Erreur de lecture du fichier' });
+        }
+
+        console.log('Data from file:', data);
+        const possession = data.find(p => p.libelle === libelle);
+        if (!possession) {
+            return res.status(404).json({ error: 'Possession non trouvée' });
+        }
+
+        possession.dateFin = new Date().toISOString();
+
+        await writeFile('./data/possessions.json', data);
+        res.status(200).json({ success: true, data: possession });
+    } catch (error) {
+        console.error('Erreur lors de la clôture de la possession:', error);
+        res.status(500).json({ error: 'Erreur interne du serveur' });
+    }
+}
+
+
 // Mettre à jour une possession par libelle
 export async function updatePossession(req, res) {
     const { libelle } = req.params;

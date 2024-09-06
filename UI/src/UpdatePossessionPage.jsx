@@ -96,16 +96,6 @@ const UpdatePossessionPage = () => {
             />
           </div>
           <div className="form-group d-flex justify-content-evenly mb-2 mt-2">
-            <label htmlFor="valeur" className='text-info'>Valeur :</label>
-            <input
-              type="number"
-              id="valeur"
-              value={valeur}
-              disabled // Désactiver le champ valeur
-              className='px-4 bg-secondary'
-            />
-          </div>
-          <div className="form-group d-flex justify-content-evenly mb-2 mt-2">
             <label htmlFor="dateFin" className='text-info'>Date Fin :</label>
             <input
               type="date"
