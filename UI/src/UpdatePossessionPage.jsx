@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+
 const apiUrl = "https://student-patrimoine.onrender.com";
+
 const UpdatePossessionPage = () => {
   const { libelle } = useParams();
   const navigate = useNavigate();
   const [currentPossession, setCurrentPossession] = useState(null);
+  const [newLibelle, setNewLibelle] = useState('');
   const [valeur, setValeur] = useState('');
   const [dateFin, setDateFin] = useState('');
   const [loading, setLoading] = useState(false);
@@ -22,6 +25,7 @@ const UpdatePossessionPage = () => {
         const data = await response.json();
         console.log('Fetched possession data:', data);
         setCurrentPossession(data);
+        setNewLibelle(data.libelle); // Initialisation du nouveau libelle
         setValeur(data.valeur);
         setDateFin(data.dateFin || '');
       } catch (error) {
@@ -32,51 +36,13 @@ const UpdatePossessionPage = () => {
     fetchPossession();
   }, [libelle]);
 
-  /*const handleUpdate = async () => {
-    setLoading(true);
-    setError(null);
-    setSuccessMessage(null);
-
-    try {
-      console.log('Mise à jour avec les données :', {
-        valeur,
-        dateFin
-      });
-
-      const response = await fetch(`http://localhost:3001/api/possession/${libelle}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          valeur,
-          dateFin
-        }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(`Network response was not ok: ${errorData.message || 'Unknown error'}`);
-      }
-
-      const data = await response.json();
-      console.log('Update response:', data);
-      setSuccessMessage('Possession mise à jour avec succès!');
-      navigate('/possession'); // Redirect to the list of possessions
-    } catch (error) {
-      setError(error.message);
-      console.error('Erreur dans handleUpdate:', error); // Affiche l'erreur
-    } finally {
-      setLoading(false);
-    }
-  };*/
   const handleUpdate = async () => {
     setLoading(true);
     setError(null);
     setSuccessMessage(null);
 
     try {
-      const formattedDateFin = new Date(dateFin).toISOString(); // Formatage de la date
+      const formattedDateFin = dateFin ? new Date(dateFin).toISOString() : null; // Formatage de la date
 
       const response = await fetch(`${apiUrl}/api/possession/${libelle}`, {
         method: 'PUT',
@@ -84,8 +50,8 @@ const UpdatePossessionPage = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          valeur,
-          dateFin: formattedDateFin, 
+          newLibelle,  // On envoie le nouveau libelle
+          dateFin: formattedDateFin,  // Date de fin
         }),
       });
 
@@ -96,7 +62,7 @@ const UpdatePossessionPage = () => {
 
       const data = await response.json();
       setSuccessMessage('Possession mise à jour avec succès!');
-      navigate('/possession'); // Redirect to the list of possessions
+      navigate('/possession'); // Rediriger vers la liste des possessions
     } catch (error) {
       setError(error.message);
       console.error('Erreur dans handleUpdate:', error);
@@ -105,7 +71,7 @@ const UpdatePossessionPage = () => {
     }
   };
 
-  const styleDivPage = { backgroundColor: 'gray', padding: '40px', borderRadius: '20px 20px 20px 20px', boxShadow: "15px -22px 5px #5d5d5d4d" }
+  const styleDivPage = { backgroundColor: 'gray', padding: '40px', borderRadius: '20px', boxShadow: "15px -22px 5px #5d5d5d4d" }
 
   return (
     <div style={styleDivPage}>
@@ -119,13 +85,23 @@ const UpdatePossessionPage = () => {
           className="bg-secondary d-flex flex-column items-center justify-content-center rounded mx-5"
         >
           <div className="form-group d-flex justify-content-evenly mb-2 mt-2">
+            <label htmlFor="newLibelle" className='text-info'>Libelle :</label>
+            <input
+              type="text"
+              id="newLibelle"
+              value={newLibelle}
+              onChange={(e) => setNewLibelle(e.target.value)}
+              required
+              className='px-4 bg-secondary'
+            />
+          </div>
+          <div className="form-group d-flex justify-content-evenly mb-2 mt-2">
             <label htmlFor="valeur" className='text-info'>Valeur :</label>
             <input
               type="number"
               id="valeur"
               value={valeur}
-              onChange={(e) => setValeur(e.target.value)}
-              required
+              disabled // Désactiver le champ valeur
               className='px-4 bg-secondary'
             />
           </div>

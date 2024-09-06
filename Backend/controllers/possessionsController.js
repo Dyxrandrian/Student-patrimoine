@@ -47,7 +47,7 @@ export async function getPossessions(req, res) {
 // Mettre à jour une possession par libelle
 export async function updatePossession(req, res) {
     const { libelle } = req.params;
-    const { valeur, dateFin } = req.body;
+    const { newLibelle, dateFin } = req.body; // Seul newLibelle est modifiable, pas la valeur
 
     try {
         // Lire les données existantes
@@ -59,7 +59,7 @@ export async function updatePossession(req, res) {
         const updatedData = existingData.map(possession => {
             if (possession.libelle === libelle) {
                 updated = true;
-                return { ...possession, valeur, dateFin }; // Mise à jour des champs
+                return { ...possession, libelle: newLibelle || possession.libelle, dateFin }; // Seul le libelle est mis à jour
             }
             return possession;
         });
@@ -72,39 +72,13 @@ export async function updatePossession(req, res) {
         const { status: writeStatus } = await writeFile('./data/possessions.json', updatedData);
         if (writeStatus === 'ERROR') throw new Error('Erreur d\'écriture du fichier');
 
-        res.status(200).json({ message: 'Possession mise à jour avec succès' });
+        res.status(200).json({ message: 'Libelle de la possession mis à jour avec succès' });
     } catch (error) {
         console.error('Erreur dans updatePossession:', error);
         res.status(500).json({ error: 'Erreur interne du serveur' });
     }
 }
 
-// Clore une possession par libelle
-export async function closePossession(req, res) {
-    const { libelle } = req.params;
-    console.log('Received libelle:', libelle);
-
-    try {
-        const { status, data } = await readFile('./data/possessions.json');
-        if (status === 'ERROR') {
-            return res.status(500).json({ error: 'Erreur de lecture du fichier' });
-        }
-
-        console.log('Data from file:', data);
-        const possession = data.find(p => p.libelle === libelle);
-        if (!possession) {
-            return res.status(404).json({ error: 'Possession non trouvée' });
-        }
-
-        possession.dateFin = new Date().toISOString();
-
-        await writeFile('./data/possessions.json', data);
-        res.status(200).json({ success: true, data: possession });
-    } catch (error) {
-        console.error('Erreur lors de la clôture de la possession:', error);
-        res.status(500).json({ error: 'Erreur interne du serveur' });
-    }
-}
 
 export async function deletePossession(req, res) {
     const { libelle } = req.params;
