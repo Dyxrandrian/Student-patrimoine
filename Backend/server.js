@@ -8,12 +8,8 @@ const dataFilePath = './data/possessions.json';
 app.use(express.json());
 
 import bodyParser from 'body-parser';
-import possessionRoutes from './routes/possessions.js';
 
 app.use(bodyParser.json());
-
-// Utiliser les routes pour les possessions
-app.use('/api/possession', possessionRoutes);
 
 // Fonction pour lire les données du fichier JSON
 export async function readData() {
@@ -49,56 +45,6 @@ async function initializeData() {
 }
 
 initializeData();
-
-/*app.get('/possession', (req, res) => {
-    // Retourne la liste des possessions
-    res.status(200).json({ message: 'Liste des possessions' });
-    res.json(possessions);
-});
-
-app.post('/possession', async (req, res) => {
-    const { libelle, valeur, dateDebut, taux } = req.body;
-    const newPossession = req.body;
-    possessions.push(newPossession);
-    await writeData(possessions);
-    res.status(201).json(newPossession);
-    // Logic pour ajouter la possession ici
-    res.status(201).json({ message: 'Possession créée' });
-});
-
-app.put('/possession/:libelle', async (req, res) => {
-    const { libelle } = req.params;
-    const updatedPossession = req.body;
-    const index = possessions.findIndex(possession => possession.libelle === libelle);
-
-    if (index !== -1) {
-        possessions[index] = { ...possessions[index], ...updatedPossession };
-        await writeData(possessions);
-        res.json(possessions[index]);
-    } else {
-        res.status(404).json({ message: 'Possession not found' });
-    }
-});
-
-app.put('/possession/:libelle/close', async (req, res) => {
-    const { libelle } = req.params;
-    const index = possessions.findIndex(possession => possession.libelle === libelle);
-
-    if (index !== -1) {
-        possessions[index].dateFin = new Date().toISOString();
-        await writeData(possessions);
-        res.json(possessions[index]);
-    } else {
-        res.status(404).json({ message: 'Possession not found' });
-    }
-});
-
-app.patch('/possession/:libelle/close', (req, res) => {
-    const { libelle } = req.params;
-    res.send(`Patch received for ${libelle}`);
-});
-
-import calculatePatrimoine from './calculatePatrimoine.js';
 
 app.get('/api/patrimoine', async (req, res) => {
     const { date } = req.query;
